@@ -1,8 +1,5 @@
 const express = require('express')
-const mysql = require('mysql')
 const db = require('../db')
-
-db.connect()
 
 const routerCarnes = express.Router()
 
@@ -14,3 +11,5 @@ routerCarnes.get('/', (req, res) => {
     res.send(result)
   })
 })
+
+module.exports = routerCarnes
