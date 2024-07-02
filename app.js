@@ -1,22 +1,12 @@
 const express = require('express')
-const mysql = require('mysql')
+const db = require('./db')
 
 const app = express()
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: '3st3v3Z99!',
-    database: 'materias_primas'
-})
 
-db.connect((err) => {
-    if (err) {
-        throw err
-    }
-    console.log('Connected to database')
-})
+const routerTipos = express.Router()
+app.use('ingredientes/tipo', routerTipos)
+
 
 app.get('/', (req, res) => {        
     res.send('Bienvenido a la API de Materias Primas')
@@ -31,18 +21,21 @@ app.get('/ingredientes', (req, res) => {
     })
 })
 
-app.get('/ingredientes/tipo:marisco', (req, res) => {
-    let sql = 'SELECT * FROM ingredients WHERE tipo = "marisco"'
+app.get('/ingredientes/tipo', (req, res) => {
+    let sql = 'SELECT DISTINCT tipo FROM ingredients';
     db.query(sql, (err, result) => {
-        if (err) throw err
+        if (err) {
+            console.error(err);
+            res.status(500).send('Ocurrió un error al procesar su solicitud');
+            return;
+        }
         console.log(result);
-        res.json(result)
-    })
-})
-
-
+        res.json(result);
+    });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`);
 })
+
