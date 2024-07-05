@@ -1,11 +1,11 @@
 const express = require('express')
 const db = require('../db')
-const routerPescados = express.Router()
+const routerVerduras = express.Router()
 
-routerPescados.use(express.json())
+routerVerduras.use(express.json())
 
-routerPescados.get('/ingredientes/pescados', (req, res) => {
-    let sql = 'SELECT * FROM ingredients WHERE tipo = "pescado"'
+routerVerduras.get('/ingredientes/verduras', (req, res) => {
+    let sql = 'SELECT * FROM ingredients WHERE tipo = "verdura"'
     db.query(sql, (err, result) => {
     if (err) {
         console.error(err);
@@ -17,4 +17,4 @@ routerPescados.get('/ingredientes/pescados', (req, res) => {
     })
 })
 
-module.exports = routerPescados
+module.exports = routerVerduras

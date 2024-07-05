@@ -1,15 +1,20 @@
 const express = require('express')
 const db = require('../db')
-
 const routerSalsas = express.Router()
 
-routerSalsas.get('/', (req, res) => {
-  db.query('SELECT * FROM ingredientes WHERE tipo = "salsa"', (err, result) => {
+routerSalsas.use(express.json())
+
+routerSalsas.get('/ingredientes/salsas', (req, res) => {
+    let sql = 'SELECT * FROM ingredients WHERE tipo = "salsa"'
+    db.query(sql, (err, result) => {
     if (err) {
-      throw err
+        console.error(err);
+        res.status(500).send('Ocurrió un error al procesar su solicitud');
+        return;
     }
-    res.send(result)
-  })
+        console.log(result);
+        res.json(result)
+    })
 })
 
-module.exports = routerSalsas
+module.exports = routerSalsas 
