@@ -58,7 +58,7 @@ app.get('/ingredientes', (req, res) => {
     });
 })
 
-app.get('/ingredientes/pagina/:pagina', (req, res) => {
+app.get('/ingredientes/:pagina', (req, res) => {
     const limite = 25
     const pagina = req.params.pagina
     const offset = (pagina - 1) * limite
