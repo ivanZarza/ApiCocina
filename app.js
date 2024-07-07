@@ -44,39 +44,45 @@ const routerVerduras = require('./tipos/verduras')
 app.use(routerVerduras)
 
 
-app.get('/', (req, res) => {        
-    res.send('Bienvenido a la API de Materias Primas')
-})
-
 app.get('/ingredientes', (req, res) => {
-    let sql = 'SELECT * FROM ingredients'
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send('Ocurrió un error al procesar su solicitud');
-            return;
-        }
-        console.log(result);
-        res.json(result);
-    });
-})
+    const nombre = req.query.nombre; // Extrae el parámetro de consulta para la búsqueda de texto
+    let sql = 'SELECT * FROM ingredients';
+    let params = [];
 
-app.get('/ingredientes/:pagina', (req, res) => {
-    const limite = 25
-    const pagina = req.params.pagina
-    const offset = (pagina - 1) * limite
+    if (nombre) {
+        sql += ' WHERE name LIKE ?';
+        params.push(`%${nombre}%`);
+    }
 
-    let sql = 'SELECT * FROM ingredients LIMIT ? OFFSET ?';
-    db.query(sql, [limite, offset], (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send('Ocurrió un error al procesar su solicitud');
-            return;
-        }
-        console.log(result);
-        res.json(result);
-    });
-})
+    if (!req.query.pagina) {
+        // Ejecuta la consulta sin límite ni desplazamiento
+        db.query(sql, params, (error, resultados) => {
+            if (error) {
+                // Maneja el error enviando una respuesta de error al cliente
+                return res.status(500).json({ error: 'Error interno del servidor' });
+            }
+            // Envía los resultados al cliente
+            res.json(resultados);
+        });
+    } else {
+        // Aplica paginación
+        const limite = 25;
+        const pagina = parseInt(req.query.pagina, 10) || 1; // Asegura que pagina tenga un valor por defecto
+        const offset = (pagina - 1) * limite;
+
+        sql += ' LIMIT ? OFFSET ?';
+        params.push(limite, offset);
+
+        db.query(sql, params, (error, resultados) => {
+            if (error) {
+                // Maneja el error enviando una respuesta de error al cliente
+                return res.status(500).json({ error: 'Error interno del servidor' });
+            }
+            // Envía los resultados al cliente
+            res.json(resultados);
+        });
+    }
+});
 
 
 app.get('/ingredientes/:id', (req, res) => {   
