@@ -46,12 +46,24 @@ app.use(routerVerduras)
 
 app.get('/ingredientes', (req, res) => {
     const nombre = req.query.nombre; // Extrae el parámetro de consulta para la búsqueda de texto
+    const tipo = req.query.tipo; // Extrae el nuevo parámetro de consulta para filtrar por tipo
     let sql = 'SELECT * FROM ingredients';
     let params = [];
 
     if (nombre) {
         sql += ' WHERE name LIKE ?';
         params.push(`%${nombre}%`);
+    }
+
+    // Añade la condición para filtrar por tipo si el parámetro tipo está presente
+    if (tipo) {
+        if (nombre) {
+            sql += ' AND'; // Si ya hay una condición WHERE, añade AND para la siguiente condición
+        } else {
+            sql += ' WHERE'; // Si no hay una condición WHERE, la añade
+        }
+        sql += ' tipo = ?';
+        params.push(tipo);
     }
 
     if (!req.query.pagina) {
@@ -63,7 +75,7 @@ app.get('/ingredientes', (req, res) => {
             }
             // Envía los resultados al cliente
             res.json(resultados);
-        });
+        })
     } else {
         // Aplica paginación
         const limite = 25;

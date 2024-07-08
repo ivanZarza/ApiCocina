@@ -21,13 +21,9 @@ routerTipos.get('/ingredientes/tipo', (req, res) => {
 
 
 routerTipos.get('/ingredientes/tipo/:tipo', (req, res) => {
-    const limite = 25;
     const tipo = req.params.tipo;
-    const pagina = req.query.pagina ? parseInt(req.query.pagina, 10) : 1;
-    const offset = (pagina - 1) * limite;
-
-    let sql = 'SELECT * FROM ingredients WHERE tipo = ? LIMIT ? OFFSET ?';
-    db.query(sql, [tipo, limite, offset], (err, result) => {
+    let sql = 'SELECT * FROM ingredients WHERE tipo = ?';
+    db.query(sql, [tipo,], (err, result) => {
         if (err) {
             console.error(err);
             res.status(500).send('Ocurrió un error al procesar su solicitud');
