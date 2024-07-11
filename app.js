@@ -3,45 +3,17 @@ const db = require('./db')
 const app = express()
 const cors = require('cors')
 
-app.use(cors())
+app.use(cors(), cookieParser(), express.json())
 
-app.use(express.json())
+const routerRegistro = require('./login/registro')
+routerRegistro.use(express.json)
+
+const routerLogin = require('./login/login')
+app.use(routerLogin)
 
 const routerTipos = require('./tipos/tipos')
 app.use(routerTipos)
 
-const routerCarnes = require('./tipos/carnes')
-app.use(routerCarnes)
-
-const routerCereales = require('./tipos/cereales')
-app.use(routerCereales)
-
-const routerEspecias = require('./tipos/especias')
-app.use(routerEspecias)
-
-const routerFrutas = require('./tipos/frutas')
-app.use(routerFrutas)
-
-const routerFrutosSecos = require('./tipos/frutosSecos')
-app.use(routerFrutosSecos)
-
-const routerLegumbres = require('./tipos/legumbres')
-app.use(routerLegumbres)
-
-const routerMariscos = require('./tipos/mariscos')
-app.use(routerMariscos)
-
-const routerPastas = require('./tipos/pastas')
-app.use(routerPastas)
-
-const routerPescados = require('./tipos/pescados')
-app.use(routerPescados)
-
-const routerSalsas = require('./tipos/salsas')
-app.use(routerSalsas)
-
-const routerVerduras = require('./tipos/verduras')
-app.use(routerVerduras)
 
 
 app.get('/ingredientes', (req, res) => {
