@@ -3,18 +3,18 @@ const app = express()
 const cors = require('cors')
 
 app.use(cors(), express.json())
+app.use(require('./login/registro'))
+app.use(require('./login/login&logout'))
+app.use(require('./ingredientes/tipos'))
+app.use(require('./ingredientes/ingredientes'))
+app.use(require('./recetas/recetas'))
 
-const routerRegistro = require('./login/registro')
-app.use(routerRegistro)
 
-const routerLogin = require('./login/login')
-app.use(routerLogin)
+app.get('/api/listadelacompra', (req, res) => {
+    res.send('¡Bienvenido a la API de tu lista de la compra!')
+})
 
-const routerTipos = require('./tipos/tipos')
-app.use(routerTipos)
 
-const routerIngredientes = require('./ingredientes/ingredientes')
-app.use(routerIngredientes)
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

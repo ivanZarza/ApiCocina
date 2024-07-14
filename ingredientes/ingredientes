@@ -1,11 +1,11 @@
 const express = require('express');
-const db = require('../db');
+const db = require('../db/conection');
 const routernIgredientes = express.Router();
 
 routernIgredientes.use(express.json())
 
 
-routernIgredientes.get('/ingredientes', (req, res) => {
+routernIgredientes.get('/api/listadelacompra/ingredientes', (req, res) => {
     const nombre = req.query.nombre; // Extrae el parámetro de consulta para la búsqueda de texto
     const tipo = req.query.tipo; // Extrae el nuevo parámetro de consulta para filtrar por tipo
     let sql = 'SELECT * FROM ingredients';
@@ -58,7 +58,7 @@ routernIgredientes.get('/ingredientes', (req, res) => {
 });
 
 
-routernIgredientes.get('/ingredientes/:id', (req, res) => {   
+routernIgredientes.get('/api/listadelacompra/ingredientes/:id', (req, res) => {   
     let sql = 'SELECT * FROM ingredients WHERE id = ?'
     db.query(sql, [req.params.id], (err, result) => {
         if (err) {
@@ -71,7 +71,7 @@ routernIgredientes.get('/ingredientes/:id', (req, res) => {
     });
 })
 
-routernIgredientes.post('/ingredientes', (req, res) => {
+routernIgredientes.post('/api/listadelacompra/ingredientes', (req, res) => {
     let ingredient = req.body;
     let sql = 'INSERT INTO ingredients SET ?';
     db.query(sql, ingredient, (err, result) => {
@@ -85,7 +85,7 @@ routernIgredientes.post('/ingredientes', (req, res) => {
     });
 })
 
-routernIgredientes.put('/ingredientes/:id', (req, res) => {
+routernIgredientes.put('/api/listadelacompra/ingredientes/:id', (req, res) => {
     let sql = 'UPDATE ingredients SET ? WHERE id = ?';
     db.query(sql, [req.body, req.params.id], (err, result) => {
         if (err) {
@@ -98,7 +98,7 @@ routernIgredientes.put('/ingredientes/:id', (req, res) => {
     });
 })
 
-routernIgredientes.delete('/ingredientes/:id', (req, res) => {
+routernIgredientes.delete('/api/listadelacompra/ingredientes/:id', (req, res) => {
     let sql = 'DELETE FROM ingredients WHERE id = ?';
     db.query(sql, [req.params.id], (err, result) => {
         if (err) {

@@ -2,13 +2,13 @@ const express = require('express')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
-const db = require('../db')
+const db = require('../db/conection')
 const routerLogin = express.Router()
 
 routerLogin.use(express.json())
 routerLogin.use(cookieParser())
 
-routerLogin.post('/login', async (req, res) => {
+routerLogin.post('/api/listadelacompra/login', async (req, res) => {
   const { username, password } = req.body
 
   let sql = 'SELECT * FROM usuarios WHERE nombre = ?'
@@ -45,7 +45,7 @@ routerLogin.post('/login', async (req, res) => {
 })
 
 
-routerLogin.post('/logout', (req, res) => {
+routerLogin.post('/api/listadelacompra/logout', (req, res) => {
   // Elimina la cookie que contiene el token JWT
   res.clearCookie('auth_token')
   // Opcionalmente, puedes redirigir al usuario a la página de inicio de sesión o enviar una respuesta

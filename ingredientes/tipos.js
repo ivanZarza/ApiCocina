@@ -1,10 +1,10 @@
 const express = require('express');
-const db = require('../db');
+const db = require('../db/conection');
 const routerTipos = express.Router();
 
 routerTipos.use(express.json())
 
-routerTipos.get('/ingredientes/tipo', (req, res) => {
+routerTipos.get('/api/listadelacompra/ingredientes/tipo', (req, res) => {
     let sql = 'SELECT DISTINCT tipo FROM ingredients';
     db.query(sql, (err, result) => {
         if (err) {
@@ -20,7 +20,7 @@ routerTipos.get('/ingredientes/tipo', (req, res) => {
 
 
 
-routerTipos.get('/ingredientes/tipo/:tipo', (req, res) => {
+routerTipos.get('/api/listadelacompra/ingredientes/tipo/:tipo', (req, res) => {
     const tipo = req.params.tipo;
     let sql = 'SELECT * FROM ingredients WHERE tipo = ?';
     db.query(sql, [tipo,], (err, result) => {
