@@ -12,17 +12,17 @@ routerRegistro.post('/registro', async (req, res) => {
   try {
     // Extraer datos del cuerpo de la solicitud
     const { nombre,apellidos, contraseña} = req.body
-
+console.log(nombre,apellidos, contraseña)
     // Hashear la contraseña antes de almacenarla
     const contraseñaHasheada = await bcrypt.hash(contraseña, 10)
-
+console.log(contraseñaHasheada)
     let sql = 'INSERT INTO usuarios (nombre,apellidos, contraseña) VALUES (?, ?, ?)'
     db.query(sql, [nombre,apellidos, contraseñaHasheada], async (error, resultados) => {
       if (error) {
         console.error(error)
         return res.status(500).json({ error: 'Error interno del servidor' })
       }
-
+console.log(resultados)
       // Generar un token JWT para el usuario
       const token = await jwt.sign({ nombre }, 'tu_secreto_aqui', { expiresIn: '1h' })
 
@@ -36,6 +36,8 @@ routerRegistro.post('/registro', async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' })
   }
 })
+
+
 
 module.exports = routerRegistro
 
