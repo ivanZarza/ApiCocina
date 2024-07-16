@@ -12,7 +12,7 @@ routerRegistro.post('/api/listadelacompra/registro', async (req, res) => {
   try {
     // Extraer datos del cuerpo de la solicitud
     const { nombre, apellidos, contraseña } = req.body;
-    console.log(nombre, apellidos, contraseña);
+    console.log({nombre, apellidos, contraseña});
     // Hashear la contraseña antes de almacenarla
     const contraseñaHasheada = await bcrypt.hash(contraseña, 10);
     console.log(contraseñaHasheada);

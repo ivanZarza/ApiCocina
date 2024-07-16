@@ -53,3 +53,5 @@ routerLogin.post('/api/listadelacompra/logout', (req, res) => {
 })
 
 module.exports = routerLogin
+
+/* CONTRASE ÑA PARA ivan zarza estevez3ST3V3z99! */
