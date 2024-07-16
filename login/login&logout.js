@@ -9,13 +9,13 @@ routerLogin.use(express.json())
 routerLogin.use(cookieParser())
 
 routerLogin.post('/api/listadelacompra/login', async (req, res) => {
-  const { username, password } = req.body
+  const { nombre,apellidos, contraseña } = req.body
 
-  let sql = 'SELECT * FROM usuarios WHERE nombre = ?'
+  let sql = 'SELECT * FROM usuarios WHERE nombre = ? AND apellidos = ?'
 
   try {
     // Ejecutar la consulta a la base de datos
-    const [results] = await db.query(sql, [username])
+    const [results] = await db.query(sql, [nombre, apellidos])
 
     // Verificar si se encontró algún usuario
     if (results.length === 0) {
@@ -26,7 +26,7 @@ routerLogin.post('/api/listadelacompra/login', async (req, res) => {
     const user = results[0]
 
     // Comparar la contraseña proporcionada con la almacenada
-    const match = await bcrypt.compare(password, user.password)
+    const match = await bcrypt.compare(contraseña, user.contraseña)
     if (!match) {
       return res.status(401).send('Contraseña incorrecta')
     }
@@ -34,9 +34,18 @@ routerLogin.post('/api/listadelacompra/login', async (req, res) => {
     // Generar el token JWT
     const token = jwt.sign({ userId: user.id }, 'tu_secreto_aqui', { expiresIn: '1h' })
 
+    // Preparar los datos del usuario para enviar, excluyendo la contraseña
+    const userData = {
+      id: user.usuId,
+      nombre: user.nombre,
+      apellidos: user.apellidos,
+      // Agrega aquí más campos según sea necesario, excluyendo siempre la contraseña
+    }
+
+
     // Enviar el token en una cookie
     res.cookie('auth_token', token, { httpOnly: true, secure: true })
-    res.send('Login exitoso')
+    res.send({mensaje: 'Inicio de sesión exitoso', user: userData})
   } catch (error) {
     // Manejar posibles errores de la consulta o de bcrypt
     console.error(error)
