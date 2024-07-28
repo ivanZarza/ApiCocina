@@ -38,42 +38,20 @@ routernIgredientes.get('/api/listadelacompra/ingredientes', (req, res) => {
             res.json(resultados);
         })
     } else {
-        /*         // Aplica paginación
-                const limite = 20;
-                const pagina = parseInt(req.query.pagina, 10) || 1; // Asegura que pagina tenga un valor por defecto
-                const offset = (pagina - 1) * limite;
-        
-                sql += ' LIMIT ? OFFSET ?';
-                params.push(limite, offset);
-        
-                db.query(sql, params, (error, resultados) => {
-                    if (error) {
-                        // Maneja el error enviando una respuesta de error al cliente
-                        return res.status(500).json({ error: 'Error interno del servidor' });
-                    }
-                    // Envía los resultados al cliente
-                    res.json(resultados);
-                });
-            }
-        }); */
-
-        // Aplica paginación
-        const limite = 20;
-        const pagina = parseInt(req.query.pagina, 10) || 1; // Asegura que pagina tenga un valor por defecto
-        const offset = (pagina - 1) * limite;
-
-        // Antes de aplicar paginación, obtén el total de elementos
-        let sqlTotal = 'SELECT COUNT(*) AS total FROM ingredients'; // Ajusta la consulta según tu tabla y criterios
+        let sqlTotal = 'SELECT COUNT(*) AS total FROM ingredients';
         db.query(sqlTotal, (errorTotal, resultadosTotal) => {
             if (errorTotal) {
                 // Maneja el error enviando una respuesta de error al cliente
                 return res.status(500).json({ error: 'Error al calcular el total de elementos' });
             }
-            const totalElementos = resultadosTotal[0].total;// Obtiene el total de elementos de la primera fila
-            console.log(totalElementos);
-            const totalPaginas = Math.ceil(totalElementos / limite);// Calcula el total de páginas
-            console.log(totalPaginas);
-            // Continúa con la paginación y la consulta original
+            const totalElementos = resultadosTotal[0].total;
+            const totalPaginas = Math.ceil(totalElementos / limite);
+
+            // Aplica paginación
+            const limite = 20;
+            const pagina = parseInt(req.query.pagina, 10) || 1; // Asegura que pagina tenga un valor por defecto
+            const offset = (pagina - 1) * limite;
+
             sql += ' LIMIT ? OFFSET ?';
             params.push(limite, offset);
 
@@ -82,13 +60,14 @@ routernIgredientes.get('/api/listadelacompra/ingredientes', (req, res) => {
                     // Maneja el error enviando una respuesta de error al cliente
                     return res.status(500).json({ error: 'Error interno del servidor' });
                 }
-                // Envía los resultados y el total de páginas al cliente
+                // Envía los resultados y el total de elementos al cliente
                 res.json({
                     resultados: resultados,
+                    totalElementos: totalElementos,
                     totalPaginas: totalPaginas
                 });
             });
-        });
+        })
     }
 })
 
