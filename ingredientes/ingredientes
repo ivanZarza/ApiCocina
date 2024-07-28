@@ -39,8 +39,8 @@ routernIgredientes.get('/api/listadelacompra/ingredientes', (req, res) => {
         })
     } else {
         // Aplica paginación
-        const limite = 25;
-        const pagina = parseInt(req.query.pagina, 10) || 1; // Asegura que pagina tenga un valor por defecto
+        const limite = 20;
+        const pagina = parseInt(req.query.pagina, 20) || 1; // Asegura que pagina tenga un valor por defecto
         const offset = (pagina - 1) * limite;
 
         sql += ' LIMIT ? OFFSET ?';
