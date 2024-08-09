@@ -2,13 +2,22 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 
-app.use(cors(), express.json())
+// Configuración de CORS para permitir cualquier origen y aceptar credenciales
+const corsOptions = {
+    origin: (origin, callback) => {
+        callback(null, true); // Permitir cualquier origen
+    },
+    credentials: true, // Permitir credenciales
+};
+
+app.use(cors(corsOptions), express.json())
 app.use(require('./login/registro'))
 app.use(require('./login/login'))
 app.use(require('./login/logout'))
 app.use(require('./ingredientes/tipos'))
 app.use(require('./ingredientes/ingredientes'))
 app.use(require('./recetas/recetas'))
+app.use(require('./usuario/me'))
 
 
 
