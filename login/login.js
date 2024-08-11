@@ -1,15 +1,12 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const cookieParser = require('cookie-parser')
 const db = require('../db/conection')
+
+
 const routerLogin = express.Router()
 
-
-
-
 routerLogin.use(express.json())
-routerLogin.use(cookieParser())
 
 routerLogin.post('/api/listadelacompra/login', async (req, res) => {
   const { nombre, apellidos, contraseña } = req.body;
@@ -56,7 +53,7 @@ routerLogin.post('/api/listadelacompra/login', async (req, res) => {
       
       
       
-      res.cookie('auth_token', token, { httpOnly: true, secure: true })
+      res.cookie('auth_token', token, { sameSite: 'none' })
       res.send({mensaje: 'Inicio de sesión exitoso', user: userData})
     }
     )

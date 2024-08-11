@@ -1,6 +1,7 @@
 // authMiddleware.js
 const jwt = require('jsonwebtoken')
 
+
 function verificarToken(req, res, next) {
   // Extraer el token de las cookies
   const token = req.cookies['auth_token']

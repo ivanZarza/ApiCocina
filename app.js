@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
+const authMiddleware = require('./helpers/authMiddleware')
 
 // Configuración de CORS para permitir cualquier origen y aceptar credenciales
 const corsOptions = {
@@ -10,13 +12,15 @@ const corsOptions = {
     credentials: true, // Permitir credenciales
 };
 
-app.use(cors(corsOptions), express.json())
+app.use(cors(corsOptions), express.json(), cookieParser())
 app.use(require('./login/registro'))
 app.use(require('./login/login'))
-app.use(require('./login/logout'))
 app.use(require('./ingredientes/tipos'))
 app.use(require('./ingredientes/ingredientes'))
 app.use(require('./recetas/recetas'))
+app.use(require('./login/logout'))
+
+app.use(authMiddleware)
 app.use(require('./usuario/me'))
 
 
