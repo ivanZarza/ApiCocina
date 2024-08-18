@@ -48,7 +48,7 @@ routernIgredientes.get('/api/listadelacompra/ingredientes', (req, res) => {
             const totalElementos = resultadosTotal[0].total;
 
             // Aplica paginación
-            const limite = 50;
+            const limite = 20;
             const pagina = 'pagina' in req.query ? Number(req.query.pagina) : 1
             // const pagina = parseInt(req.query.pagina, 10) || 1; // Asegura que pagina tenga un valor por defecto
             const offset = (pagina - 1) * limite;
