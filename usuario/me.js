@@ -4,7 +4,7 @@ const routerMe = express.Router()
 
 routerMe.use(express.json())
 
-routerMe.get('/api/listadelacompra/usuario/:id', authMiddleware, (req, res) => {
+routerMe.get('/api/listadelacompra/me/:id', authMiddleware, (req, res) => {
   const userId = req.params.id; // Obtener el ID del usuario de la URL
 
   // Consulta SQL para obtener los datos del usuario por ID
