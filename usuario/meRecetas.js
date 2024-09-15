@@ -26,11 +26,11 @@ routerMeRecetas.get('/api/listadelacompra/me/:id/recetas',  (req, res) => {
 
 routerMeRecetas.post('/api/listadelacompra/me/:id/recetas',  (req, res) => {
   try {
-    let { usuarioId, datosJSON } = req.body;
     let id = req.params.id;
-    console.log({ id, usuarioId, datosJSON });
+    let { datosJSON } = req.body;
+    console.log(id,datosJSON);
     let sql = 'INSERT INTO materias_primas.recetas (usuarioId, datosJSON) VALUES (?, ?)';
-    db.query(sql, [usuarioId, datosJSON], async (error, resultados) => {
+    db.query(sql, [id, datosJSON], async (error, resultados) => {
       if (error) {
         console.error(error);
         return res.status(500).json({ error: 'Error interno del servidor' });
