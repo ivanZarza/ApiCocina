@@ -9,7 +9,7 @@ routerMeDatos.get('/api/listadelacompra/me/:id/datos', (req, res) => {
   const userId = req.params.id; // Obtener el ID del usuario de la URL
 
   // Consulta SQL para obtener los datos del usuario por ID
-  const sqlUsuario = 'SELECT * FROM usuarios WHERE id = ?';
+  const sqlUsuario = 'SELECT nombre, apellidos FROM usuarios WHERE usuId = ?';
 
   db.query(sqlUsuario, [userId], (error, resultsUsuario) => {
     if (error) {
