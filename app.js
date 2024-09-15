@@ -16,7 +16,7 @@ app.use(cors(corsOptions), express.json(), cookieParser())
 app.use(require('./login/registro'))
 app.use(require('./login/login'))
 app.use(require('./ingredientes/tipos'))
-app.use(require('./ingredientes/ingredientes'))
+app.use(require('./ingredientes/ingredientes.js'))
 app.use(require('./recetas/recetas'))
 app.use(require('./login/logout'))
 

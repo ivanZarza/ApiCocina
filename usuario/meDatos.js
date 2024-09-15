@@ -1,10 +1,11 @@
 const express = require('express')
-const authMiddleware = require('../helpers/authMiddleware')
+const db = require('../db/conection')
 const routerMeDatos = express.Router()
+
 
 routerMeDatos.use(express.json())
 
-routerMeDatos.get('/api/listadelacompra/me/:id/datos', authMiddleware, (req, res) => {
+routerMeDatos.get('/api/listadelacompra/me/:id/datos', (req, res) => {
   const userId = req.params.id; // Obtener el ID del usuario de la URL
 
   // Consulta SQL para obtener los datos del usuario por ID
