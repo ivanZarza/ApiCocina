@@ -27,7 +27,7 @@ routerMeRecetas.get('/api/listadelacompra/me/:id/recetas',  (req, res) => {
 routerMeRecetas.post('/api/listadelacompra/me/:id/recetas',  (req, res) => {
   try {
     let id = req.params.id;
-    let { datosJSON } = req.body;
+    let  datosJSON  = JSON.stringify(req.body);
     console.log(id,datosJSON);
     let sql = 'INSERT INTO materias_primas.recetas (usuarioId, datosJSON) VALUES (?, ?)';
     db.query(sql, [id, datosJSON], async (error, resultados) => {
