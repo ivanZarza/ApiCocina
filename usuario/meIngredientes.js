@@ -47,4 +47,5 @@ routerMeIngredientes.post('/api/listadelacompra/me/:id/ingredientes', (req, res)
   }
 });
 
-module.exports = routerMeIngredientes;S
+module.exports = routerMeIngredientes;
+
