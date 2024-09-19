@@ -22,6 +22,7 @@ app.use(require('./login/logout'))
 app.use(require('./usuario/me'))
 app.use(require('./usuario/meDatos'))
 app.use(require('./usuario/meRecetas'))
+app.use(require('./usuario/meIngredientes'))
 
 /* app.use(authMiddleware) */
 

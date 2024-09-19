@@ -30,11 +30,11 @@ routerMeIngredientes.get('/api/listadelacompra/me/:id/ingredientes', (req, res) 
 
 routerMeIngredientes.post('/api/listadelacompra/me/:id/ingredientes', (req, res) => {
   try {
-    let userId = req.params.id;
-    const { nombre, tipo, principal, acompañamiento,condimento } = req.body;
-    const sqlInsertarIngrediente = 'INSERT INTO ingredientes (nombre, tipo, principal, acompañamiento, condimento, usuarioId) VALUES (?, ?, ?, ?)';
+    let id = req.params.id;
+    let { nombre, tipo, principal, acompañamiento,condimento } = req.body;
+    let sql = 'INSERT INTO materias_primas.ingredientes_usuarios (usuarioId, nombre, tipo, principal, acompañamiento, condimento) VALUES (?, ?, ?, ?, ?, ?)';
 
-    db.query(sqlInsertarIngrediente, [nombre, tipo, principal, acompañamiento, condimento, userId], (error, result) => {
+    db.query(sql, [id, nombre, tipo, principal, acompañamiento, condimento], (error, result) => {
       if (error) {
         throw new Error('Error al insertar el ingrediente');
       }
