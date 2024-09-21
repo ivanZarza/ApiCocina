@@ -45,7 +45,31 @@ routerMeIngredientes.post('/api/listadelacompra/me/:id/ingredientes', (req, res)
     console.error(error.message);
     res.status(500).send('Error en el servidor');
   }
-});
+})
+
+routerMeIngredientes.delete('/api/listadelacompra/me/:id/ingredientes', (req, res) => {
+  try {
+    let id = req.params.id;
+    let ingredienteId = req.body;
+    let sql = 'DELETE FROM materias_primas.ingredientes_usuarios WHERE id = ? AND usuarioId = ?';
+
+    db.query(sql, [ingredienteId, id], (error, result) => {
+      if (error) {
+        throw new Error('Error al borrar el ingrediente');
+      }
+
+      if (result.affectedRows > 0) {
+        res.send('Ingrediente eliminado correctamente');
+      } else {
+        res.status(404).send('Ingrediente no encontrado');
+      }
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Error en el servidor');
+  }
+})
+
 
 module.exports = routerMeIngredientes;
 
