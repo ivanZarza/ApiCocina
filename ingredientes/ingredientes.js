@@ -28,18 +28,7 @@ routernIgredientes.get('/api/listadelacompra/ingredientes', (req, res) => {
         params.push(tipo);
     }
 
-    // if (!req.query.pagina) {
-    //     // Ejecuta la consulta sin límite ni desplazamiento
-    //     db.query(sql, params, (error, resultados) => {
-    //         if (error) {
-    //             // Maneja el error enviando una respuesta de error al cliente
-    //             return res.status(500).json({ error: 'Error interno del servidor' });
-    //         }
-    //         // Envía los resultados al cliente
-    //         res.json(resultados);
-    //     })
-    // } else {
-        let sqlTotal = 'SELECT COUNT(*) AS total FROM ingredients';
+        let sqlTotal = 'SELECT COUNT(*) AS total FROM ingredients'; 
         db.query(sqlTotal, (errorTotal, resultadosTotal) => {
             if (errorTotal) {
                 // Maneja el error enviando una respuesta de error al cliente

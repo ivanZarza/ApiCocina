@@ -5,28 +5,36 @@ const routerMeIngredientes = express.Router()
 routerMeIngredientes.use(express.json())
 
 routerMeIngredientes.get('/api/listadelacompra/me/:id/ingredientes', (req, res) => {
-  try {
-    let userId = req.params.id;
-    const sqlIngredientes = 'SELECT * FROM ingredientes WHERE usuarioId = ?';
+  const userId = req.params.id; // Extrae el ID del usuario de los parámetros de la ruta
 
-    db.query(sqlIngredientes, [userId], (error, resultsIngredientes) => {
-      if (error) { // Corregido de errorIngredientes a error
-        throw new Error('Error al realizar la consulta de ingredientes');
+  // Primera consulta a la tabla ingredients
+  let sql = 'SELECT * FROM ingredients WHERE usuarioId = ?';
+  let params = [userId];
+
+  // Segunda consulta a la tabla materias_primas.ingredientes_usuarios
+  const sqlIngredientes = 'SELECT * FROM materias_primas.ingredientes_usuarios WHERE usuarioId = ?';
+
+  // Ejecuta la primera consulta
+  db.query(sql, params, (error, resultadosIngredients) => {
+      if (error) {
+          return res.status(500).json({ error: 'Error al consultar ingredients' });
       }
 
-      if (resultsIngredientes.length > 0) { // Verificación si hay resultados
-        res.json({
-          ingredientes: resultsIngredientes
-        });
-      } else {
-        res.status(404).send('Usuario no encontrado o sin ingredientes');
-      }
-    });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send('Error en el servidor');
-  }
+      // Ejecuta la segunda consulta
+      db.query(sqlIngredientes, [userId], (errorIngredientes, resultadosIngredientesUsuarios) => {
+          if (errorIngredientes) {
+              return res.status(500).json({ error: 'Error al consultar materias_primas.ingredientes_usuarios' });
+          }
+
+          // Combina los resultados de ambas consultas
+          const resultadosCombinados = [...resultadosIngredients, ...resultadosIngredientesUsuarios];
+
+          // Envía los resultados combinados al cliente
+          res.json(resultadosCombinados);
+      });
+  });
 });
+
 
 routerMeIngredientes.post('/api/listadelacompra/me/:id/ingredientes', (req, res) => {
   try {
@@ -73,3 +81,33 @@ routerMeIngredientes.delete('/api/listadelacompra/me/:id/ingredientes', (req, re
 
 module.exports = routerMeIngredientes;
 
+/* routerIngredientes.get('/api/listadelacompra/me/:id/ingredientestotales', (req, res) => {
+  const userId = req.params.id; // Extrae el ID del usuario de los parámetros de la ruta
+
+  // Primera consulta a la tabla ingredients
+  let sql = 'SELECT * FROM ingredients WHERE usuarioId = ?';
+  let params = [userId];
+
+  // Segunda consulta a la tabla materias_primas.ingredientes_usuarios
+  const sqlIngredientes = 'SELECT * FROM materias_primas.ingredientes_usuarios WHERE usuarioId = ?';
+
+  // Ejecuta la primera consulta
+  db.query(sql, params, (error, resultadosIngredients) => {
+      if (error) {
+          return res.status(500).json({ error: 'Error al consultar ingredients' });
+      }
+
+      // Ejecuta la segunda consulta
+      db.query(sqlIngredientes, [userId], (errorIngredientes, resultadosIngredientesUsuarios) => {
+          if (errorIngredientes) {
+              return res.status(500).json({ error: 'Error al consultar materias_primas.ingredientes_usuarios' });
+          }
+
+          // Combina los resultados de ambas consultas
+          const resultadosCombinados = [...resultadosIngredients, ...resultadosIngredientesUsuarios];
+
+          // Envía los resultados combinados al cliente
+          res.json({ resultados: resultadosCombinados });
+      });
+  });
+}); */
