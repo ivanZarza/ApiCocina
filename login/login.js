@@ -53,7 +53,7 @@ routerLogin.post('/api/listadelacompra/login', async (req, res) => {
       
       
       
-      res.cookie('auth_token', token, { sameSite: 'none' })
+      res.cookie('auth_token', token)
       res.send({mensaje: 'Inicio de sesión exitoso', user: userData})
     }
     )

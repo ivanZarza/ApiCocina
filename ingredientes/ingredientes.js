@@ -50,9 +50,10 @@ routernIgredientes.get('/api/listadelacompra/ingredientes', (req, res) => {
                     // Maneja el error enviando una respuesta de error al cliente
                     return res.status(500).json({ error: 'Error interno del servidor' });
                 }
+
+                res.cookie('foo', 'bar')
                 // Envía los resultados y el total de elementos al cliente
-                res.json({ resultados, totalElementos
-                });
+                res.json({ resultados, totalElementos });
             });
         })
     // }
