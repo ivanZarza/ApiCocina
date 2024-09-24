@@ -24,7 +24,7 @@ routerMeDatos.get('/api/listadelacompra/me/:id/datos', async (req, res) => {
             throw new Error('Error al realizar la consulta de recetas');
           }
   
-          const sqlIngredientes = 'SELECT * FROM materias_primas.ingredientes_usuarios WHERE usuarioId = ?';
+          const sqlIngredientes = 'SELECT * FROM materias_primas.ingredients WHERE usuarioId = ?';
           db.query(sqlIngredientes, [userId], (errorIngredientes, resultsIngredientes) => {
             if (errorIngredientes) {
               throw new Error('Error al realizar la consulta de ingredientes');
