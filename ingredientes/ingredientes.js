@@ -5,26 +5,19 @@ const routernIgredientes = express.Router();
 routernIgredientes.use(express.json())
 
 routernIgredientes.get('/api/listadelacompra/ingredientes', (req, res) => {
-    console.log('$userId', req.$userId)
 
     const nombre = req.query.nombre; // Extrae el parámetro de consulta para la búsqueda de texto
     const tipo = req.query.tipo; // Extrae el nuevo parámetro de consulta para filtrar por tipo
-    let sql = 'SELECT * FROM ingredients';
+    let sql = 'SELECT * FROM ingredients WHERE usuarioId IS NULL';
     let params = [];
 
     if (nombre) {
-        sql += ' WHERE name LIKE ?';
+        sql += ' AND name LIKE ?'; // Añade AND para la condición de nombre
         params.push(`%${nombre}%`);
     }
 
-    // Añade la condición para filtrar por tipo si el parámetro tipo está presente
     if (tipo) {
-        if (nombre) {
-            sql += ' AND'; // Si ya hay una condición WHERE, añade AND para la siguiente condición
-        } else {
-            sql += ' WHERE'; // Si no hay una condición WHERE, la añade
-        }
-        sql += ' tipo = ?';
+        sql += ' AND tipo = ?'; // Añade AND para la condición de tipo
         params.push(tipo);
     }
 
@@ -50,13 +43,10 @@ routernIgredientes.get('/api/listadelacompra/ingredientes', (req, res) => {
                     // Maneja el error enviando una respuesta de error al cliente
                     return res.status(500).json({ error: 'Error interno del servidor' });
                 }
-
-                res.cookie('foo', 'bar')
                 // Envía los resultados y el total de elementos al cliente
                 res.json({ resultados, totalElementos });
             });
         })
-    // }
 })
 
 

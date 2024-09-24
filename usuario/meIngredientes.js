@@ -5,34 +5,43 @@ const routerMeIngredientes = express.Router()
 routerMeIngredientes.use(express.json())
 
 routerMeIngredientes.get('/api/listadelacompra/me/:id/ingredientes', (req, res) => {
-  const userId = req.params.id; // Extrae el ID del usuario de los parámetros de la ruta
 
-  // Primera consulta a la tabla ingredients
-  let sql = 'SELECT * FROM ingredients WHERE usuarioId = ?';
-  let params = [userId];
+    const userId = req.params.id; // Extrae el ID del usuario de los parámetros de la ruta
+    const nombre = req.query.nombre; // Extrae el parámetro de consulta para la búsqueda de texto
+    const tipo = req.query.tipo; // Extrae el nuevo parámetro de consulta para filtrar por tipo
+    let sql = 'SELECT * FROM ingredients WHERE usuarioId = ? OR usuarioId IS NULL';
+    let params = [userId];
 
-  // Segunda consulta a la tabla materias_primas.ingredientes_usuarios
-  const sqlIngredientes = 'SELECT * FROM materias_primas.ingredientes_usuarios WHERE usuarioId = ?';
+    if (nombre) {
+        sql += ' AND name LIKE ?';
+        params.push(`%${nombre}%`);
+    }
 
-  // Ejecuta la primera consulta
-  db.query(sql, params, (error, resultadosIngredients) => {
-      if (error) {
-          return res.status(500).json({ error: 'Error al consultar ingredients' });
-      }
+    if (tipo) {
+        sql += ' AND tipo = ?';
+        params.push(tipo);
+    }
 
-      // Ejecuta la segunda consulta
-      db.query(sqlIngredientes, [userId], (errorIngredientes, resultadosIngredientesUsuarios) => {
-          if (errorIngredientes) {
-              return res.status(500).json({ error: 'Error al consultar materias_primas.ingredientes_usuarios' });
-          }
+    let sqlTotal = 'SELECT COUNT(*) AS total FROM ingredients WHERE usuarioId = ? OR usuarioId IS NULL'; 
+    db.query(sqlTotal, [userId], (errorTotal, resultadosTotal) => {
+        if (errorTotal) {
+            return res.status(500).json({ error: 'Error al calcular el total de elementos' });
+        }
 
-          // Combina los resultados de ambas consultas
-          const resultadosCombinados = [...resultadosIngredients, ...resultadosIngredientesUsuarios];
+        const limite = 20;
+        const pagina = 'pagina' in req.query ? Number(req.query.pagina) : 1;
+        const offset = (pagina - 1) * limite;
 
-          // Envía los resultados combinados al cliente
-          res.json(resultadosCombinados);
-      });
-  });
+        sql += ' LIMIT ? OFFSET ?';
+        params.push(limite, offset);
+
+        db.query(sql, params, (error, resultados) => {
+            if (error) {
+                return res.status(500).json({ error: 'Error interno del servidor' });
+            }
+            res.json({ resultados });
+        });
+    });
 });
 
 
@@ -40,9 +49,9 @@ routerMeIngredientes.post('/api/listadelacompra/me/:id/ingredientes', (req, res)
   try {
     let id = req.params.id;
     let { nombre, tipo, principal, acompañamiento,condimento } = req.body;
-    let sql = 'INSERT INTO materias_primas.ingredientes_usuarios (usuarioId, nombre, tipo, principal, acompañamiento, condimento) VALUES (?, ?, ?, ?, ?, ?)';
+    let sql = 'INSERT INTO materias_primas.ingredients (nombre, tipo, principal, acompañamiento, condimento,usuarioId) VALUES (?, ?, ?, ?, ?, ?)';
 
-    db.query(sql, [id, nombre, tipo, principal, acompañamiento, condimento], (error, result) => {
+    db.query(sql, [nombre, tipo, principal, acompañamiento, condimento,id], (error, result) => {
       if (error) {
         throw new Error('Error al insertar el ingrediente');
       }
@@ -59,7 +68,7 @@ routerMeIngredientes.delete('/api/listadelacompra/me/:id/ingredientes', (req, re
   try {
     let id = req.params.id;
     let ingredienteId = req.body;
-    let sql = 'DELETE FROM materias_primas.ingredientes_usuarios WHERE id = ? AND usuarioId = ?';
+    let sql = 'DELETE FROM materias_primas.ingredients WHERE id = ? AND usuarioId = ?';
 
     db.query(sql, [ingredienteId, id], (error, result) => {
       if (error) {
@@ -80,34 +89,3 @@ routerMeIngredientes.delete('/api/listadelacompra/me/:id/ingredientes', (req, re
 
 
 module.exports = routerMeIngredientes;
-
-/* routerIngredientes.get('/api/listadelacompra/me/:id/ingredientestotales', (req, res) => {
-  const userId = req.params.id; // Extrae el ID del usuario de los parámetros de la ruta
-
-  // Primera consulta a la tabla ingredients
-  let sql = 'SELECT * FROM ingredients WHERE usuarioId = ?';
-  let params = [userId];
-
-  // Segunda consulta a la tabla materias_primas.ingredientes_usuarios
-  const sqlIngredientes = 'SELECT * FROM materias_primas.ingredientes_usuarios WHERE usuarioId = ?';
-
-  // Ejecuta la primera consulta
-  db.query(sql, params, (error, resultadosIngredients) => {
-      if (error) {
-          return res.status(500).json({ error: 'Error al consultar ingredients' });
-      }
-
-      // Ejecuta la segunda consulta
-      db.query(sqlIngredientes, [userId], (errorIngredientes, resultadosIngredientesUsuarios) => {
-          if (errorIngredientes) {
-              return res.status(500).json({ error: 'Error al consultar materias_primas.ingredientes_usuarios' });
-          }
-
-          // Combina los resultados de ambas consultas
-          const resultadosCombinados = [...resultadosIngredients, ...resultadosIngredientesUsuarios];
-
-          // Envía los resultados combinados al cliente
-          res.json({ resultados: resultadosCombinados });
-      });
-  });
-}); */
