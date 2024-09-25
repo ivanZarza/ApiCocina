@@ -45,7 +45,7 @@ routerLogin.post('/api/listadelacompra/login', async (req, res) => {
 
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' })
 
-      const userData = {
+      const datosUsuario = {
         id: user.usuId,
         nombre: user.nombre,
         apellidos: user.apellidos,
@@ -53,8 +53,8 @@ routerLogin.post('/api/listadelacompra/login', async (req, res) => {
       
       
       
-      res.cookie('auth_token', token)
-      res.send({mensaje: 'Inicio de sesión exitoso', user: userData})
+      res.cookie('auth_token', token/*, { httpOnly: true, secure: true, sameSite: 'none' } */)
+      res.send({mensaje: 'Inicio de sesión exitoso', datos: datosUsuario})
     }
     )
   })
