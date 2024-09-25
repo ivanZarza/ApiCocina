@@ -3,6 +3,7 @@ const app = express()
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const authMiddleware = require('./helpers/authMiddleware')
+require('dotenv').config();
 
 // Configuración de CORS para permitir cualquier origen y aceptar credenciales
 const corsOptions = {
@@ -18,13 +19,19 @@ app.use(require('./login/login'))
 app.use(require('./ingredientes/tipos'))
 app.use(require('./ingredientes/ingredientes'))
 app.use(require('./recetas/recetas'))
+/* app.use(require('./login/logout'))
+app.use(require('./usuario/me'))
+app.use(require('./usuario/meDatos'))
+app.use(require('./usuario/meRecetas'))
+app.use(require('./usuario/meIngredientes')) */
+
+app.use(authMiddleware)
 app.use(require('./login/logout'))
 app.use(require('./usuario/me'))
 app.use(require('./usuario/meDatos'))
 app.use(require('./usuario/meRecetas'))
 app.use(require('./usuario/meIngredientes'))
 
-/* app.use(authMiddleware) */
 
 app.get('/api/listadelacompra', (req, res) => {
     res.send('¡Bienvenido a la API de tu lista de la compra!')

@@ -27,11 +27,10 @@ routerRegistro.post('/api/listadelacompra/registro', async (req, res) => {
       console.log(userId);
 
       // Generar un token JWT para el usuario
-      const token = await jwt.sign({
+      const token =  jwt.sign({
         sub: userId, // Identificador único del usuario
-        username: nombre, // Nombre de usuario para propósitos de visualización
       },
-      'tu_secreto_aqui', // La clave secreta para firmar el JWT
+      process.env.JWT_SECRET, // La clave secreta para firmar el JWT
       { expiresIn: '1h' } // El token expira en 1 hora
       );
 

@@ -1,5 +1,7 @@
 // authMiddleware.js
 const jwt = require('jsonwebtoken')
+require('dotenv').config();
+
 
 
 function verificarToken(req, res, next) {
@@ -11,7 +13,7 @@ function verificarToken(req, res, next) {
   }
 
   try {
-    const decoded = jwt.verify(token, 'tu_secreto_aqui')
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
     req.usuario = decoded
     next()
   } catch (error) {
