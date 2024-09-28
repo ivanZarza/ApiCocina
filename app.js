@@ -3,7 +3,7 @@ const app = express()
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const authMiddleware = require('./helpers/authMiddleware')
-require('dotenv').config();
+require('dotenv').config(); // Cargar variables de entorno
 
 // Configuración de CORS para permitir cualquier origen y aceptar credenciales
 const corsOptions = {
