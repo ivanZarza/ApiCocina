@@ -43,7 +43,7 @@ routerLogin.post('/api/listadelacompra/login', async (req, res) => {
         return
       }
 
-      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' })
+      const token = jwt.sign({ id: user.id ,nombre: user.nombre}, process.env.JWT_SECRET, { expiresIn: '1h' })
 
       const datosUsuario = {
         id: user.usuId,
