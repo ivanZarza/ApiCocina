@@ -19,11 +19,7 @@ app.use(require('./login/login'))
 app.use(require('./ingredientes/tipos'))
 app.use(require('./ingredientes/ingredientes'))
 app.use(require('./recetas/recetas'))
-/* app.use(require('./login/logout'))
-app.use(require('./usuario/me'))
-app.use(require('./usuario/meDatos'))
-app.use(require('./usuario/meRecetas'))
-app.use(require('./usuario/meIngredientes')) */
+
 
 app.use(authMiddleware)
 app.use(require('./login/logout'))

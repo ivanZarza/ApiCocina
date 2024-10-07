@@ -29,8 +29,6 @@ routerLogin.post('/api/listadelacompra/login', async (req, res) => {
 
     const [user] = results
 
-    console.log('user is', `${user.nombre} ${user.apellidos}`)
-
     bcrypt.compare(contraseña, user.contraseña, (err, match) => {
       if (err) {
         console.error(err)
@@ -51,10 +49,8 @@ routerLogin.post('/api/listadelacompra/login', async (req, res) => {
         apellidos: user.apellidos,
       }
       
-      
-      
       res.cookie('auth_token', token/*, { httpOnly: true, secure: true, sameSite: 'none' } */)
-      res.send({mensaje: 'Inicio de sesión exitoso', datos: datosUsuario})
+      res.status(201).json({mensaje: 'Inicio de sesión exitoso', datos: datosUsuario})
     }
     )
   })

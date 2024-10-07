@@ -9,7 +9,7 @@ function verificarToken(req, res, next) {
   const token = req.cookies['auth_token']
 
   if (!token) {
-    return res.status(403).json({ error: 'Se requiere un token para autenticación' })
+    return res.status(401).json({ error: 'Se requiere un token valido para autenticación' })
   }
 
   try {
@@ -17,7 +17,7 @@ function verificarToken(req, res, next) {
     req.usuario = decoded
     next()
   } catch (error) {
-    return res.status(401).json({ error: 'Token inválido o expirado' })
+    return res.status(403).json({ error: 'No tienes los permisos necesarios  o el token a expirado' })
   }
 }
 
