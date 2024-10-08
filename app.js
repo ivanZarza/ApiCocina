@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
-/* const verificarToken = require('./helpers/authMiddleware') */
+const verificarToken = require('./helpers/authMiddleware')
 
 require('dotenv').config(); // Cargar variables de entorno
 
@@ -22,7 +22,7 @@ app.use(require('./ingredientes/ingredientes'))
 app.use(require('./recetas/recetas'))
 
 
-/* app.use(verificarToken) */
+app.use(verificarToken)
 app.use(require('./usuario/me'))
 app.use(require('./usuario/meDatos'))
 app.use(require('./usuario/meRecetas'))

@@ -12,6 +12,7 @@ function verificarToken(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
     const sql = 'SELECT * FROM materias_primas.usuarios WHERE usuId = ?';
     db.query(sql, [decoded.id], (error, results) => {
       if (error) {
@@ -20,7 +21,7 @@ function verificarToken(req, res, next) {
       }
 
       if (results.length === 0) {
-        return res.status(404).send('Usuario no encontrado');
+        return res.status(400).send('Usuario no encontrado');
       }
 
       req.user = results[0];
@@ -28,9 +29,9 @@ function verificarToken(req, res, next) {
       if (req.user.nombre !== decoded.nombre) {
         return res.status(403).json({ error: 'No tienes los permisos necesarios' });
       }
-console.log('linea 31 del authMiddleware', req.user);
+
       next(); // Mover next() aquí asegura que se llama después de que req.user ha sido definido
-      console.log('linea 33 del authMiddleware', req.user);
+
     });
   } catch (error) {
     return res.status(403).json({ error: 'No tienes los permisos necesarios o el token ha expirado' });
