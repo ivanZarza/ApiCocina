@@ -40,4 +40,7 @@ function verificarToken(req, res, next) {
   }
 }
 
+// se usa req.user para almacenar los datos del usuario en la solicitud y 
+// se pasa al siguiente middleware con next()
+
 module.exports = verificarToken

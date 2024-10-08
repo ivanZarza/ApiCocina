@@ -5,9 +5,9 @@ const routerMeDatos = express.Router()
 
 routerMeDatos.use(express.json())
 
-routerMeDatos.get('/api/listadelacompra/me/:id/datos', async (req, res) => {
+routerMeDatos.get('/api/listadelacompra/me/datos', async (req, res) => {
   try {
-    let userId = req.params.id; // Obtener el ID del usuario de la URL
+    let userId = req.user.id; // Obtener el ID del usuario de la URL
   
     // Consulta SQL para obtener los datos del usuario por ID
     const sqlUsuario = 'SELECT nombre, apellidos FROM usuarios WHERE usuId = ?';

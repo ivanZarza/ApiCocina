@@ -4,9 +4,9 @@ const routerMeIngredientes = express.Router()
 
 routerMeIngredientes.use(express.json())
 
-routerMeIngredientes.get('/api/listadelacompra/me/:id/ingredientes', (req, res) => {
+routerMeIngredientes.get('/api/listadelacompra/me/ingredientes', (req, res) => {
 
-    const userId = req.params.id; // Extrae el ID del usuario de los parámetros de la ruta
+    const userId = req.user.id; // Extrae el ID del usuario de los parámetros de la ruta
     const nombre = req.query.nombre; // Extrae el parámetro de consulta para la búsqueda de texto
     const tipo = req.query.tipo; // Extrae el nuevo parámetro de consulta para filtrar por tipo
     let sql = 'SELECT * FROM ingredients WHERE usuarioId = ? OR usuarioId IS NULL';

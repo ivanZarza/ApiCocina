@@ -5,9 +5,9 @@ const routerMeRecetas = express.Router();
 
 routerMeRecetas.use(express.json());
 
-routerMeRecetas.get('/api/listadelacompra/me/:id/recetas', (req, res) => {
+routerMeRecetas.get('/api/listadelacompra/me/recetas', (req, res) => {
   try {
-    let userId = req.params.id; // Obtener el ID del usuario de la URL
+    let userId = req.user.id; // Obtener el ID del usuario de la URL
     // Consulta SQL para obtener las recetas del usuario por ID
     let sql = 'SELECT * FROM materias_primas.recetas WHERE usuarioId = ?';
 
