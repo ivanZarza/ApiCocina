@@ -1,16 +1,18 @@
 const express = require('express')
 const db = require('../db/conection')
+const verificarToken = require('../helpers/authMiddleware');
 const routerMeDatos = express.Router()
 
-
 routerMeDatos.use(express.json())
+routerMeDatos.use(verificarToken);
+
 
 routerMeDatos.get('/api/listadelacompra/me/datos', async (req, res) => {
   try {
-    let userId = req.user.id; // Obtener el ID del usuario de la URL
-  
+    let userId = req.user.id
+  console.log('linea 11 del meDatos', req.user.id );
     // Consulta SQL para obtener los datos del usuario por ID
-    const sqlUsuario = 'SELECT nombre, apellidos FROM usuarios WHERE usuId = ?';
+    const sqlUsuario = 'SELECT nombre, apellidos FROM materias_primas.usuarios WHERE usuId = ?';
   
     db.query(sqlUsuario, [userId], (error, resultsUsuario) => {
       if (error) {

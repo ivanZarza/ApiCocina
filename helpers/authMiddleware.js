@@ -1,23 +1,18 @@
 // authMiddleware.js
-const jwt = require('jsonwebtoken')
-const db = require('../db/conection')
+const jwt = require('jsonwebtoken');
+const db = require('../db/conection');
 require('dotenv').config();
 
-
-
 function verificarToken(req, res, next) {
-  // Extraer el token de las cookies
-  const token = req.cookies['auth_token']
+  const token = req.cookies['auth_token'];
 
   if (!token) {
-    return res.status(401).json({ error: 'Se requiere un token valido para autenticación' })
+    return res.status(401).json({ error: 'Se requiere un token valido para autenticación' });
   }
 
   try {
-    // Verificar el token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
-
-    const sql = 'SELECT * FROM usuarios WHERE usuId = ?'
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const sql = 'SELECT * FROM materias_primas.usuarios WHERE usuId = ?';
     db.query(sql, [decoded.id], (error, results) => {
       if (error) {
         console.error('Error al realizar la consulta:', error);
@@ -28,15 +23,17 @@ function verificarToken(req, res, next) {
         return res.status(404).send('Usuario no encontrado');
       }
 
-      req.user = results[0]
-      console.log(req.user);
+      req.user = results[0];
+
       if (req.user.nombre !== decoded.nombre) {
-        return res.status(403).json({ error: 'No tienes los permisos necesarios' })
+        return res.status(403).json({ error: 'No tienes los permisos necesarios' });
       }
-      next()
-    })
+console.log('linea 31 del authMiddleware', req.user);
+      next(); // Mover next() aquí asegura que se llama después de que req.user ha sido definido
+      console.log('linea 33 del authMiddleware', req.user);
+    });
   } catch (error) {
-    return res.status(403).json({ error: 'No tienes los permisos necesarios  o el token a expirado' })
+    return res.status(403).json({ error: 'No tienes los permisos necesarios o el token ha expirado' });
   }
 }
 

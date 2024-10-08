@@ -1,13 +1,14 @@
 const express = require('express')
 const routerMe = express.Router()
+const db = require('../db/conection')
 
 routerMe.use(express.json())
 
-routerMe.get('/api/listadelacompra/me/:id', (req, res) => {
+routerMe.get('/api/listadelacompra/me', (req, res) => {
   const userId = req.user.id; // Obtener el ID del usuario de la URL
 
   // Consulta SQL para obtener los datos del usuario por ID
-  const sql = 'SELECT * FROM usuarios WHERE id = ?'
+  const sql = 'SELECT * FROM usuarios WHERE usuId = ?'
 
   db.query(sql, [userId], (error, results) => {
     if (error) {
