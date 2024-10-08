@@ -19,7 +19,7 @@ routerRegistro.post('/api/listadelacompra/registro', async (req, res) => {
     const contraseñaHasheada = await bcrypt.hash(contraseña, 10);
 
     let sql = 'INSERT INTO usuarios (nombre, apellidos, contraseña) VALUES (?, ?, ?)';
-    db.query(sql, [nombre, apellidos, contraseñaHasheada], async (error, resultados) => {
+    db.query(sql, [nombre, apellidos, contraseñaHasheada],(error, resultados) => {
       if (error) {
         console.error(error);
         return res.status(500).json({ error: 'Error interno del servidor' });
@@ -27,7 +27,7 @@ routerRegistro.post('/api/listadelacompra/registro', async (req, res) => {
 //insertId es una propiedad explicita de la libreria mysql que devuelve el id del último registro insertado en la base de datos
       const usuarioId = resultados.insertId 
       // Generar un token JWT para el usuario
-      const token =  jwt.sign({ id:usuarioId },process.env.JWT_SECRET, { expiresIn: '30s' })
+      const token =  jwt.sign({ id:usuarioId, nombre:nombre },process.env.JWT_SECRET, { expiresIn: '30s' })
 
       // Guardar el token en una cookie
       res.cookie('auth_token', token/* , { httpOnly: true, secure: true } */);
