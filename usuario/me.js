@@ -5,7 +5,7 @@ const db = require('../db/conection')
 routerMe.use(express.json())
 
 routerMe.get('/api/listadelacompra/me', (req, res) => {
-  const userId = req.user.id; // Obtener el ID del usuario de la URL
+  const userId = req.user.userId; // Obtener el ID del usuario de la URL
 
   // Consulta SQL para obtener los datos del usuario por ID
   const sql = 'SELECT * FROM usuarios WHERE usuId = ?'
@@ -13,7 +13,7 @@ routerMe.get('/api/listadelacompra/me', (req, res) => {
   db.query(sql, [userId], (error, results) => {
     if (error) {
       // Manejar el error de la consulta
-      console.error('Error al realizar la consulta:', error)
+      console.error('linea 16 ME','Error al realizar la consulta:', error)
       return res.status(500).send('Error al obtener los datos del usuario')
     }
 

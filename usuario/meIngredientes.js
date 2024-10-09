@@ -8,8 +8,8 @@ routerMeIngredientes.use(verificarToken);
 
 routerMeIngredientes.get('/api/listadelacompra/me/ingredientes', (req, res) => {
 
-    const userId = req.user.id; // Extrae el ID del usuario de los parámetros de la ruta
-    console.log('linea 12 del meIngredientes', req.user.id );
+    const userId = req.user.usuId; // Extrae el ID del usuario de los parámetros de la ruta
+    console.log('linea 12 del meIngredientes', req.user.usuId );
     const nombre = req.query.nombre; // Extrae el parámetro de consulta para la búsqueda de texto
     const tipo = req.query.tipo; // Extrae el nuevo parámetro de consulta para filtrar por tipo
     let sql = 'SELECT * FROM ingredients WHERE usuarioId = ? OR usuarioId IS NULL';
@@ -50,7 +50,7 @@ routerMeIngredientes.get('/api/listadelacompra/me/ingredientes', (req, res) => {
 
 routerMeIngredientes.post('/api/listadelacompra/me/:id/ingredientes', (req, res) => {
   try {
-    let id = req.params.id;
+    let id = req.user.usuId;
     let { nombre, tipo, principal, acompañamiento,condimento } = req.body;
     let sql = 'INSERT INTO materias_primas.ingredients (nombre, tipo, principal, acompañamiento, condimento,usuarioId) VALUES (?, ?, ?, ?, ?, ?)';
 
@@ -69,7 +69,7 @@ routerMeIngredientes.post('/api/listadelacompra/me/:id/ingredientes', (req, res)
 
 routerMeIngredientes.delete('/api/listadelacompra/me/:id/ingredientes', (req, res) => {
   try {
-    let id = req.params.id;
+    let id = req.user.usuId;
     let ingredienteId = req.body;
     let sql = 'DELETE FROM materias_primas.ingredients WHERE id = ? AND usuarioId = ?';
 
