@@ -4,7 +4,6 @@ const verificarToken = require('../helpers/authMiddleware');
 const routerMeIngredientes = express.Router()
 
 routerMeIngredientes.use(express.json())
-routerMeIngredientes.use(verificarToken);
 
 routerMeIngredientes.get('/api/listadelacompra/me/ingredientes', (req, res) => {
 
@@ -48,9 +47,10 @@ routerMeIngredientes.get('/api/listadelacompra/me/ingredientes', (req, res) => {
 });
 
 
-routerMeIngredientes.post('/api/listadelacompra/me/:id/ingredientes', (req, res) => {
+routerMeIngredientes.post('/api/listadelacompra/me/ingredientes', (req, res) => {
   try {
     let id = req.user.usuId;
+    console.log('linea 53 del meIngredientes', req.user.usuId );
     let { nombre, tipo, principal, acompañamiento,condimento } = req.body;
     let sql = 'INSERT INTO materias_primas.ingredients (nombre, tipo, principal, acompañamiento, condimento,usuarioId) VALUES (?, ?, ?, ?, ?, ?)';
 
@@ -67,7 +67,7 @@ routerMeIngredientes.post('/api/listadelacompra/me/:id/ingredientes', (req, res)
   }
 })
 
-routerMeIngredientes.delete('/api/listadelacompra/me/:id/ingredientes', (req, res) => {
+routerMeIngredientes.delete('/api/listadelacompra/me/ingredientes', (req, res) => {
   try {
     let id = req.user.usuId;
     let ingredienteId = req.body;
