@@ -30,7 +30,10 @@ routerMeIngredientes.get('/api/listadelacompra/me/ingredientes', (req, res) => {
             return res.status(500).json({ error: 'Error al calcular el total de elementos' });
         }
 
+        const totalElementos = resultadosTotal[0].total;
+
         const limite = 20;
+        console.log('linea 36 del meIngredientes', req.query.pagina);
         const pagina = 'pagina' in req.query ? Number(req.query.pagina) : 1;
         const offset = (pagina - 1) * limite;
 
@@ -41,7 +44,7 @@ routerMeIngredientes.get('/api/listadelacompra/me/ingredientes', (req, res) => {
             if (error) {
                 return res.status(500).json({ error: 'Error interno del servidor' });
             }
-            res.json({ resultados });
+            res.json({ resultados, totalElementos });
         });
     });
 });
@@ -50,7 +53,7 @@ routerMeIngredientes.get('/api/listadelacompra/me/ingredientes', (req, res) => {
 routerMeIngredientes.post('/api/listadelacompra/me/ingredientes', (req, res) => {
   try {
     let id = req.user.usuId;
-    console.log('linea 53 del meIngredientes', req.user.usuId );
+    console.log('linea 53 del meIngredientes', req.user.usuId ); 
     let { nombre, tipo, principal, acompañamiento,condimento } = req.body;
     let sql = 'INSERT INTO materias_primas.ingredients (nombre, tipo, principal, acompañamiento, condimento,usuarioId) VALUES (?, ?, ?, ?, ?, ?)';
 
