@@ -7,7 +7,7 @@ routerMeRecetas.use(express.json());
 
 routerMeRecetas.get('/api/listadelacompra/me/recetas', (req, res) => {
   try {
-    let userId = req.user.id; // Obtener el ID del usuario de la URL
+    let userId = req.user.usuId;
     // Consulta SQL para obtener las recetas del usuario por ID
     let sql = 'SELECT * FROM materias_primas.recetas WHERE usuarioId = ?';
 
@@ -24,13 +24,12 @@ routerMeRecetas.get('/api/listadelacompra/me/recetas', (req, res) => {
   }
 });
 
-routerMeRecetas.post('/api/listadelacompra/me/:id/recetas', (req, res) => {
+routerMeRecetas.post('/api/listadelacompra/me/recetas', (req, res) => {
   try {
-    let id = req.params.id;
+    let userId = req.user.usuId;
     let datosJSON = JSON.stringify(req.body);
-    console.log(id, datosJSON);
     let sql = 'INSERT INTO materias_primas.recetas (usuarioId, datosJSON) VALUES (?, ?)';
-    db.query(sql, [id, datosJSON], async (error, resultados) => {
+    db.query(sql, [userId, datosJSON], async (error, resultados) => {
       if (error) {
         console.error(error);
         return res.status(500).json({ error: 'Error interno del servidor' });
@@ -43,9 +42,9 @@ routerMeRecetas.post('/api/listadelacompra/me/:id/recetas', (req, res) => {
   }
 });
 
-routerMeRecetas.delete('/api/listadelacompra/me/:id/recetas', (req, res) => {
+routerMeRecetas.delete('/api/listadelacompra/me/recetas/id', (req, res) => {
   try {
-    let id = req.params.id
+    let id = req.user.id
     let recetaId = req.body.id;
     let sql = 'DELETE FROM materias_primas.recetas WHERE id = ? AND usuarioId = ?';
     db.query(sql, [recetaId, id], (error, resultados) => {

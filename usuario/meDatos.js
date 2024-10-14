@@ -7,10 +7,10 @@ routerMeDatos.use(express.json())
 
 routerMeDatos.get('/api/listadelacompra/me/datos', async (req, res) => {
   try {
+    let userId = req.user.usuId
     // Consulta SQL para obtener los datos del usuario por ID
     const sqlUsuario = 'SELECT nombre, apellidos FROM materias_primas.usuarios WHERE usuId = ?';
-    let userId = req.user.usuId
-    console.log('linea 15 del meDatos', req.user.id );
+    console.log('linea 15 del meDatos', req.user.usuId );
     db.query(sqlUsuario, [userId], (error, resultsUsuario) => {
       if (error) {
         throw new Error('Error al realizar la consulta de usuario');
