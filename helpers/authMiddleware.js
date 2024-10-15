@@ -29,8 +29,6 @@ function verificarToken(req, res, next) {
       if (req.user.nombre !== decoded.nombre) {
         return res.status(403).json({ error: 'No tienes los permisos necesarios' });
       }
-      console.log('linea 32 authmiddleware',decoded.id);
-      console.log('linea 32 authmiddleware',req.user.usuId);
       next();//Pasar al siguiente middleware
 
     });

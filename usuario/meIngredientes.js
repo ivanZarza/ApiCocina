@@ -33,7 +33,6 @@ routerMeIngredientes.get('/api/listadelacompra/me/ingredientes', (req, res) => {
         const totalElementos = resultadosTotal[0].total;
 
         const limite = 20;
-        console.log('linea 36 del meIngredientes', req.query.pagina);
         const pagina = 'pagina' in req.query ? Number(req.query.pagina) : 1;
         const offset = (pagina - 1) * limite;
 

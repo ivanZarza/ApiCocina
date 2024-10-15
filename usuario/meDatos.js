@@ -1,6 +1,5 @@
 const express = require('express')
 const db = require('../db/conection')
-const verificarToken = require('../helpers/authMiddleware');
 const routerMeDatos = express.Router()
 
 routerMeDatos.use(express.json())

@@ -34,7 +34,9 @@ routerMeRecetas.post('/api/listadelacompra/me/recetas', (req, res) => {
         console.error(error);
         return res.status(500).json({ error: 'Error interno del servidor' });
       }
-      res.status(201).send({ mensaje: 'Receta añadida con éxito' });
+      // Acceder a insertId para obtener el ID de la receta agregada
+      const recetaId = resultados.insertId;
+      res.status(201).send({ mensaje: 'Receta añadida con éxito', id: recetaId });
     });
   } catch (error) {
     console.error(error);
