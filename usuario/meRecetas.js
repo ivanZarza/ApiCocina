@@ -28,15 +28,23 @@ routerMeRecetas.post('/api/listadelacompra/me/recetas', (req, res) => {
   try {
     let userId = req.user.usuId;
     let datosJSON = JSON.stringify(req.body);
-    let sql = 'INSERT INTO materias_primas.recetas (usuarioId, datosJSON) VALUES (?, ?)';
-    db.query(sql, [userId, datosJSON], async (error, resultados) => {
+    let sqlInsert = 'INSERT INTO materias_primas.recetas (usuarioId, datosJSON) VALUES (?, ?)';
+    db.query(sqlInsert, [userId, datosJSON], async (error, resultados) => {
       if (error) {
         console.error(error);
         return res.status(500).json({ error: 'Error interno del servidor' });
       }
-      // Acceder a insertId para obtener el ID de la receta agregada
       const recetaId = resultados.insertId;
-      res.status(201).send({ mensaje: 'Receta añadida con éxito', id: recetaId });
+      // Consulta para obtener la receta recién insertada
+      let sqlSelect = 'SELECT id, datosJSON FROM materias_primas.recetas WHERE id = ?';
+      db.query(sqlSelect, [recetaId], (error, resultados) => {
+        if (error) {
+          console.error(error);
+          return res.status(500).json({ error: 'Error interno del servidor' });
+        }
+        // Devolver la receta completa
+        res.status(201).json({ mensaje: 'Receta añadida con éxito', receta: resultados[0] });
+      });
     });
   } catch (error) {
     console.error(error);
@@ -44,10 +52,12 @@ routerMeRecetas.post('/api/listadelacompra/me/recetas', (req, res) => {
   }
 });
 
-routerMeRecetas.delete('/api/listadelacompra/me/recetas/id', (req, res) => {
+routerMeRecetas.delete('/api/listadelacompra/me/recetas/:id', (req, res) => {
   try {
-    let id = req.user.id
-    let recetaId = req.body.id;
+    let id = req.user.usuId
+    let recetaId = req.params.id;
+    console.log('linea 59 del meRecetas', req.user.usuId );
+    console.log('linea 60 del meRecetas', req.params.id );
     let sql = 'DELETE FROM materias_primas.recetas WHERE id = ? AND usuarioId = ?';
     db.query(sql, [recetaId, id], (error, resultados) => {
       if (error) {
