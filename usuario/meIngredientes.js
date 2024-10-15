@@ -8,7 +8,7 @@ routerMeIngredientes.use(express.json())
 routerMeIngredientes.get('/api/listadelacompra/me/ingredientes', (req, res) => {
 
     const userId = req.user.usuId; // Extrae el ID del usuario de los parámetros de la ruta
-    console.log('linea 12 del meIngredientes', req.user.usuId );
+
     const nombre = req.query.nombre; // Extrae el parámetro de consulta para la búsqueda de texto
     const tipo = req.query.tipo; // Extrae el nuevo parámetro de consulta para filtrar por tipo
     let sql = 'SELECT * FROM ingredients WHERE usuarioId = ? OR usuarioId IS NULL';
