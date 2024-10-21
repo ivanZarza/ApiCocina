@@ -52,12 +52,13 @@ routerMeRecetas.post('/api/listadelacompra/me/recetas', (req, res) => {
   }
 });
 
+
 routerMeRecetas.delete('/api/listadelacompra/me/recetas/:id', (req, res) => {
   try {
     let id = req.user.usuId
     let recetaId = req.params.id;
-    console.log('linea 59 del meRecetas', req.user.usuId );
-    console.log('linea 60 del meRecetas', req.params.id );
+    console.log('linea 59 del meRecetas', req.user.usuId);
+    console.log('linea 60 del meRecetas', req.params.id);
     let sql = 'DELETE FROM materias_primas.recetas WHERE id = ? AND usuarioId = ?';
     db.query(sql, [recetaId, id], (error, resultados) => {
       if (error) {
