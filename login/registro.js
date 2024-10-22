@@ -16,6 +16,17 @@ routerRegistro.post('/api/listadelacompra/registro', async (req, res) => {
       return res.status(400).json({ error: 'Faltan datos obligatorios' });
     }
 
+    // Comprobar si el usuario ya existe
+    let sqlComprobar = 'SELECT * FROM usuarios WHERE nombre = ? AND apellidos = ?';
+    db.query(sqlComprobar, [nombre, apellidos], async (error, resultados) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Error interno del servidor' });
+      }
+      if (resultados.length > 0) {
+        return res.status(400).json({ error: 'El usuario ya existe' });
+      }
+
     const contraseñaHasheada = await bcrypt.hash(contraseña, 10);
 
     let sql = 'INSERT INTO usuarios (nombre, apellidos, contraseña) VALUES (?, ?, ?)';
@@ -33,7 +44,8 @@ routerRegistro.post('/api/listadelacompra/registro', async (req, res) => {
       res.cookie('auth_token', token/* , { httpOnly: true, secure: true } */);
 
       res.status(201).json({ id: usuarioId });
-    });
+    })
+  })
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error interno del servidor' });
