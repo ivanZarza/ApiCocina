@@ -17,11 +17,11 @@ function verificarToken(req, res, next) {
     db.query(sql, [decoded.id], (error, results) => {
       if (error) {
         console.error('Error al realizar la consulta:', error);
-        return res.status(500).send('Error al obtener los datos del usuario');
+        return res.status(500).json({ error: 'Error al obtener los datos del usuario'});
       }
 
       if (results.length === 0) {
-        return res.status(400).send('Usuario no encontrado');
+        return res.status(400).json({ error: 'Usuario no encontrado'});
       }
 
       req.user = results[0];
