@@ -12,7 +12,7 @@ routerLogin.post('/api/listadelacompra/login', async (req, res) => {
   try {
     const { nombre, apellidos, contraseña } = req.body
     if (!nombre || !apellidos || !contraseña) {
-      res.status(400).send('Faltan datos obligatorios')
+      res.status(400).json('Faltan datos obligatorios')
       return;
     }
 
@@ -20,12 +20,12 @@ routerLogin.post('/api/listadelacompra/login', async (req, res) => {
     db.query(sql, [nombre, apellidos], (err, results) => {
       if (err) {
         console.error(err)
-        res.status(500).send('Error en el servidor')
-        return;
+        return res.status(500).json({ error:'Error en el servidor'})
+        
       }
 
       if (results.length === 0) {
-        return res.status(404).send('Usuario no encontrado')
+        return res.status(404).json({ error:'Usuario no encontrado'})
       }
 
       const [user] = results;
@@ -33,13 +33,12 @@ routerLogin.post('/api/listadelacompra/login', async (req, res) => {
       bcrypt.compare(contraseña, user.contraseña, (err, match) => {
         if (err) {
           console.error(err)
-          res.status(500).send('Error en el servidor')
-          return;
+          return res.status(500).json({ error:'Error en el servidor'})
+
         }
 
         if (!match) {
-          res.status(401).send('Contraseña incorrecta');
-          return;
+          return res.status(401).json({ error:'Contraseña incorrecta'});
         }
 
         const token = jwt.sign({ id: user.usuId, nombre:user.nombre }, process.env.JWT_SECRET, { expiresIn: '1h' })
@@ -55,7 +54,7 @@ routerLogin.post('/api/listadelacompra/login', async (req, res) => {
     })
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error inesperado en el servidor');
+    res.status(500).json({ error: 'Error inesperado en el servidor'});
   }
 })
 
